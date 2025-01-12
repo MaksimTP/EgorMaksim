@@ -1,0 +1,52 @@
+package main
+
+import (
+	"flag"
+	"fmt"
+	"os"
+)
+
+type Options struct {
+	B bool
+	E bool
+	N bool
+	S bool
+	T bool
+}
+
+func ParseArgs() (Options, []string) {
+	b := flag.Bool("b", false, "")
+	n := flag.Bool("n", false, "")
+	e := flag.Bool("e", false, "")
+	s := flag.Bool("s", false, "")
+	t := flag.Bool("t", false, "")
+	flag.Parse()
+
+	files := flag.Args()
+	return Options{
+		B: *b,
+		E: *e,
+		N: *n,
+		S: *s,
+		T: *t,
+	}, files
+}
+
+func Cat(filename string, opts Options) {
+	fd, err := os.ReadFile(filename)
+	if err != nil {
+		return
+	}
+	fmt.Println(string(fd))
+}
+
+func main() {
+	opts, files := ParseArgs()
+
+	fmt.Printf("Options: %#v", opts)
+
+	for _, file := range files {
+		Cat(file, opts)
+	}
+
+}
